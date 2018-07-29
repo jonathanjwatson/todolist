@@ -32,9 +32,23 @@ var ToDoItemTwo = new ToDoItem({
     dailyItem: false
 });
 
+var ToDoItemThree = new ToDoItem({
+    name: "Buy Biltong Jerkey",
+    description: "Lots of it.",
+    completed: false,
+    dailyItem: false
+});
+
 var DailyListOne = new DailyList({
-    todaysDate: '2018-07-29 0:0:0.0',
+    todaysDate: new Date(Date.UTC(2018, 06, 29, 0, 0, 0.0)),
+    // todaysDate: '2018-07-29 0:0:0.0',
     taskList: [ToDoItemOne, ToDoItemTwo]
+});
+
+var DailyListTwo = new DailyList({
+    // todaysDate: '2018-07-30 0:0:0.0',
+    todaysDate: new Date(Date.UTC(2018, 06, 30, 0, 0, 0.0)),
+    taskList: [ToDoItemThree, ToDoItemTwo]
 });
 
 
@@ -47,11 +61,18 @@ ToDoItemTwo.save( (err) => {
     if (err) console.log('ToDoItemTwo error' + err);
     console.log('ToDoItemTwo created');
 });
+ToDoItemThree.save( (err) => {
+    if (err) console.log('ToDoItemThree error' + err);
+    console.log('ToDoItemThree created');
+});
 DailyListOne.save( (err) => {
     if (err) console.log('DailyListOne error' + err);
     console.log('DailyListOne created');
 });
-
+DailyListTwo.save( (err) => {
+    if (err) console.log('DailyListTwo error' + err);
+    console.log('DailyListTwo created');
+});
 
 // CONNECTION EVENTS
 db.once('open', function() {

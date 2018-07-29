@@ -7,7 +7,7 @@ var cron = require('cron');
 const DailyListController = require("./controllers/dailyList");
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI); //mongodb://localhost/fullstack-jeopardy
+mongoose.connect(process.env.MONGODB_URI);
 
 const connection = mongoose.connection;
 connection.on('connected', () => {
