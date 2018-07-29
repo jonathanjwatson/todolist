@@ -28,10 +28,28 @@ router.get("/todaysDate", (req, res) => {
     });
 });
 
-router.get("/:searchDate*?", (req, res) => {
-    var todaysDate = new Date();
-    todaysDate.setHours(0,0,0,0);
+router.get("/:searchDate?", (req, res) => {
+    console.log(req.params);
+    var searchDate = req.params.searchDate;
+    var searchDateArray = searchDate.split("-");
+    console.log(searchDateArray)
+    var todaysDate = new Date(Date.UTC(searchDateArray[0], searchDateArray[1] - 1, searchDateArray[2], 0, 0.0));
+    // var todaysDate = new Date(searchDateArray[0], searchDateArray[1], searchDateArray[2], 0, 0);
+    // todaysDate.setHours(0,0,0,0);
     console.log(todaysDate);
+
+    DailyList.find().then(dailyListResults => {
+        console.log(dailyListResults);
+        let resultsToReturn = dailyListResults.filter(singleResult => {
+            console.log(Date.parse(singleResult.todaysDate) == (Date.parse(todaysDate)));
+            
+            return Date.parse(singleResult.todaysDate) == (Date.parse(todaysDate));
+        });
+        console.log(resultsToReturn);
+        res.json(resultsToReturn);
+    }).catch(err => {
+        console.error(err);
+    })
 });
 
 
