@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const app = express();
 var cron = require('cron');
 const DailyListController = require("./controllers/dailyList");
+const TaskCreatorController = require("./controllers/taskCreator");
+const DailyListCreatorController = require("./controllers/buildDailyList");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
@@ -28,6 +30,8 @@ app.use(bodyParser.json());
 // cronJob.start();
 
 app.use('/api/v1/dailyList', DailyListController);
+app.use('/api/v1/taskCreator', TaskCreatorController);
+app.use('/api/v1/createTodaysTasks', DailyListCreatorController);
 
 app.use(express.static(__dirname + '/client/build/'));
 app.get('*', (req,res) => {

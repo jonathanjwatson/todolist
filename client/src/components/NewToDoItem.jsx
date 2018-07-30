@@ -9,7 +9,7 @@ class NewToDoListItem extends Component {
         this.state = {
             name: '',
             description: '',
-            dailyItem: '',
+            dailyItem: false,
             dateDue: '',
             mondayTask: false,
             tuesdayTask: false,
@@ -18,6 +18,7 @@ class NewToDoListItem extends Component {
             fridayTask: false,
             saturdayTask: false,
             sundayTask: false,
+            completed: false,
             isDailyItem: false,
             isRepeateItem: false,
             isSpecificDateItem: false
@@ -33,8 +34,10 @@ class NewToDoListItem extends Component {
     _handleSubmit = (e) => {
 		e.preventDefault();
 		const payload = {...this.state};
-		axios.post(`/api/new/dispensary`, payload)
+		axios.post(`/api/v1/taskCreator/create`, payload)
 		.then((res) => {
+            console.log(res);
+            alert("Yup!");
 
         })
         .catch((err) => {
