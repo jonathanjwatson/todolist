@@ -21,11 +21,11 @@ connection.on('error', (err) => {
 
 app.use(bodyParser.json());
 
-var cronJob = cron.job("* 1 * * * *", function(){
-    // perform operation e.g. GET request http.get() etc.
-    console.info('cron job completed');
-}); 
-cronJob.start();
+// var cronJob = cron.job("* 1 * * * *", function(){
+//     // perform operation e.g. GET request http.get() etc.
+//     console.info('cron job completed');
+// }); 
+// cronJob.start();
 
 app.use('/api/v1/dailyList', DailyListController);
 
