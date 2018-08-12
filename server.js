@@ -7,6 +7,7 @@ var cron = require('cron');
 const AllController = require("./controllers/all");
 const DailyListController = require("./controllers/dailyList");
 const TaskCreatorController = require("./controllers/taskCreator");
+const TaskUpdaterController = require("./controllers/taskUpdater");
 const DailyListCreatorController = require("./controllers/buildDailyList");
 
 mongoose.Promise = global.Promise;
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 app.use('/api/v1/all', AllController);
 app.use('/api/v1/dailyList', DailyListController);
 app.use('/api/v1/taskCreator', TaskCreatorController);
+app.use('/api/v1/taskUpdater', TaskUpdaterController);
 app.use('/api/v1/createTodaysTasks', DailyListCreatorController);
 
 app.use(express.static(__dirname + '/client/build/'));

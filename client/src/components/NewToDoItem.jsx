@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Form, FormControl, FormGroup, Button, Checkbox, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import moment from 'moment';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
+moment().format('YYYY-MM-DD');
 
 
 class NewToDoListItem extends Component {
@@ -13,7 +16,7 @@ class NewToDoListItem extends Component {
             name: '',
             description: '',
             dailyItem: false,
-            dateDue: moment(),
+            dateDue: null,
             monday: false,
             tuesday: false,
             wednesday: false,
@@ -27,9 +30,6 @@ class NewToDoListItem extends Component {
             showDatePicker: false,
 
         }};
-    componentDidMount() {
-        console.log(this.state.dateDue);
-    }
     cancelRepeat = (e) => {
         e.preventDefault();
         const newState = this.state;
@@ -42,7 +42,7 @@ class NewToDoListItem extends Component {
         newState.sunday = false;
         newState.showRepeatItemMenu = !newState.showRepeatItemMenu;
         this.setState(newState);
-    }
+    };
     clickTheRightBoxes = () => {
         if (this.state.taskType === "isDailyTask"){
             const newState = this.state;
@@ -96,11 +96,11 @@ class NewToDoListItem extends Component {
         this.setState(newState);
     };
     _handleDateChange = (date) => {
-        console.log(date._d);
+        console.log(date);
         const newState = {...this.state};
         newState.dateDue = date;
         this.setState(newState);
-      }
+    };
     _handleSubmit = (e) => {
 		e.preventDefault();
 		const payload = {...this.state};
@@ -118,7 +118,7 @@ class NewToDoListItem extends Component {
         console.log(e);
         await this.setState({taskType: e});
         await this.clickTheRightBoxes();
-    }
+    };
     _toggleDatePicker =(e) => {
         e.preventDefault();
         const newState = {...this.state};
@@ -139,18 +139,6 @@ class NewToDoListItem extends Component {
         newState.taskType = "isSporadicTask";
         this.setState(newState);
     };
-    setDailyTask = (e) => {
-        console.log("Daily Task");
-    };
-    setWeekdayTask = (e) => {
-        console.log("Weekday Task");
-    };
-    setWeekendTask = (e) => {
-        console.log("Weekend Task");
-    };
-    setSporadicTask = (e) => {
-        console.log("Sporadic Task");
-    }
 
     render() {
         return (
@@ -177,7 +165,7 @@ class NewToDoListItem extends Component {
                         />
                         <div>
                             {this.state.showRepeatItemMenu && 
-                            <div>
+                            <div className="row">
                                 <ToggleButtonGroup type="radio" name="options" value={this.state.taskType} onChange={this._handleToggleChange}>
                                     <ToggleButton inline="true" value="isDailyTask" >Daily Task</ToggleButton>
                                     <ToggleButton inline="true" value="isWeekdayTask" >Weekday Task</ToggleButton>
@@ -198,21 +186,22 @@ class NewToDoListItem extends Component {
                                 </div>
                             }
                             {this.state.showDatePicker && 
-                            <div>
+                            <div className="row">
                                 <p>This is my datepicker</p>
                                 <DatePicker
+                                    // dateFormat="YYYY-MM-DD"
                                     selected={this.state.dateDue}
                                     onChange={this._handleDateChange}
+                                    isClearable={true}
                                 />
                                 <Button bsStyle="warning" onClick={this._toggleDatePicker}>Cancel Date Picker</Button>
                             </div>
                             }
-                            {(!this.state.showDatePicker && !this.state.showRepeatItemMenu) && 
-                            <div>
+                            {!this.state.showDatePicker && !this.state.showRepeatItemMenu && 
+                            <div className="row">
                                 <Button  onClick={this._toggleRepeat}>Repeat this Item</Button>
                                 <Button onClick={this._toggleDatePicker}>Specific Date</Button>
-                            </div>
-                                
+                            </div>  
                             }
                         </div>
                         </div>
@@ -222,7 +211,7 @@ class NewToDoListItem extends Component {
                         
                         
                         
-                        <div>
+                        <div className="row">
                         <Button type="submit" bsStyle="primary">Submit</Button>
                         </div>
                         

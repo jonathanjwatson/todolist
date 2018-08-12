@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import NewToDoItem from './components/NewToDoItem';
+import ViewAll from './containers/ViewAll';
+// import NewToDoItem from './components/NewToDoItem';
 
 class App extends Component {
   render() {
@@ -11,7 +12,8 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to My ToDo List</h1>
         </header>
-        <NewToDoItem />
+        {/* <NewToDoItem /> */}
+        <ViewAll />
       </div>
     );
   }
