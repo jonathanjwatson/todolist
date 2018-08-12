@@ -24,6 +24,19 @@ class NewToDoListItem extends Component {
             showSpecificDatePicker: false,
 
         }};
+    cancelRepeat = (e) => {
+        e.preventDefault();
+        const newState = this.state;
+        newState.monday = false;
+        newState.tuesday = false;
+        newState.wednesday = false;
+        newState.thursday = false;
+        newState.friday = false;
+        newState.saturday = false;
+        newState.sunday = false;
+        newState.showRepeatItemMenu = !newState.showRepeatItemMenu;
+        this.setState(newState);
+    }
     clickTheRightBoxes = () => {
         if (this.state.taskType === "isDailyTask"){
             const newState = this.state;
@@ -147,7 +160,7 @@ class NewToDoListItem extends Component {
                         <div>
                             {this.state.showRepeatItemMenu && 
                             <div>
-                            <ToggleButtonGroup type="radio" name="options" value={this.state.taskType} onChange={this._handleToggleChange}>
+                                <ToggleButtonGroup type="radio" name="options" value={this.state.taskType} onChange={this._handleToggleChange}>
                                     <ToggleButton inline="true" value="isDailyTask" >Daily Task</ToggleButton>
                                     <ToggleButton inline="true" value="isWeekdayTask" >Weekday Task</ToggleButton>
                                     <ToggleButton inline="true" value="isWeekendTask" >Weekend Task</ToggleButton>
@@ -163,10 +176,17 @@ class NewToDoListItem extends Component {
                                     <Checkbox inline checked={this.state.saturday} name="saturday" onChange={this._toggleRepeatDays}>Saturday</Checkbox>
                                     <Checkbox inline checked={this.state.sunday} name="sunday" onChange={this._toggleRepeatDays}>Sunday</Checkbox>
                                 </FormGroup>
-                                
+                                <Button bsStyle="warning" onClick={this.cancelRepeat}>Cancel Repeat Task Selection</Button>
                                 </div>
                             }
-                            <Button onClick={this._toggleRepeat}>Repeat this Item</Button>
+                            {!this.state.showRepeatItemMenu && 
+                            <div>
+                                <Button  onClick={this._toggleRepeat}>Repeat this Item</Button>
+                                <Button>Specific Date</Button>
+                            </div>
+                                
+                            }
+                            
 
                         </div>
                         </div>
@@ -175,7 +195,7 @@ class NewToDoListItem extends Component {
                         </div>
                         
                         
-                        <Button>Specific Date</Button>
+                        
                         <div>
                         <Button type="submit" bsStyle="primary">Submit</Button>
                         </div>
