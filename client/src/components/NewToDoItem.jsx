@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Form, FormControl, FormGroup, Button, Checkbox, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 class NewToDoListItem extends Component {
@@ -10,7 +13,7 @@ class NewToDoListItem extends Component {
             name: '',
             description: '',
             dailyItem: false,
-            dateDue: '',
+            dateDue: moment(),
             monday: false,
             tuesday: false,
             wednesday: false,
@@ -24,6 +27,9 @@ class NewToDoListItem extends Component {
             showDatePicker: false,
 
         }};
+    componentDidMount() {
+        console.log(this.state.dateDue);
+    }
     cancelRepeat = (e) => {
         e.preventDefault();
         const newState = this.state;
@@ -89,6 +95,12 @@ class NewToDoListItem extends Component {
         newState[attributeName] = attributeValue;
         this.setState(newState);
     };
+    _handleDateChange = (date) => {
+        console.log(date._d);
+        const newState = {...this.state};
+        newState.dateDue = date;
+        this.setState(newState);
+      }
     _handleSubmit = (e) => {
 		e.preventDefault();
 		const payload = {...this.state};
@@ -188,10 +200,14 @@ class NewToDoListItem extends Component {
                             {this.state.showDatePicker && 
                             <div>
                                 <p>This is my datepicker</p>
+                                <DatePicker
+                                    selected={this.state.dateDue}
+                                    onChange={this._handleDateChange}
+                                />
                                 <Button bsStyle="warning" onClick={this._toggleDatePicker}>Cancel Date Picker</Button>
                             </div>
                             }
-                            {(!this.state.showDatePicker || this.state.showRepeatItemMenu) && 
+                            {(!this.state.showDatePicker && !this.state.showRepeatItemMenu) && 
                             <div>
                                 <Button  onClick={this._toggleRepeat}>Repeat this Item</Button>
                                 <Button onClick={this._toggleDatePicker}>Specific Date</Button>
