@@ -21,7 +21,7 @@ class NewToDoListItem extends Component {
             completed: false,
             taskType: "isSporadicTask",
             showRepeatItemMenu: false,
-            showSpecificDatePicker: false,
+            showDatePicker: false,
 
         }};
     cancelRepeat = (e) => {
@@ -107,6 +107,12 @@ class NewToDoListItem extends Component {
         await this.setState({taskType: e});
         await this.clickTheRightBoxes();
     }
+    _toggleDatePicker =(e) => {
+        e.preventDefault();
+        const newState = {...this.state};
+        newState.showDatePicker = !newState.showDatePicker;
+        this.setState(newState);
+    };
     _toggleRepeat = (e) => {
         e.preventDefault();
         const newState = {...this.state};
@@ -179,15 +185,19 @@ class NewToDoListItem extends Component {
                                 <Button bsStyle="warning" onClick={this.cancelRepeat}>Cancel Repeat Task Selection</Button>
                                 </div>
                             }
-                            {!this.state.showRepeatItemMenu && 
+                            {this.state.showDatePicker && 
+                            <div>
+                                <p>This is my datepicker</p>
+                                <Button bsStyle="warning" onClick={this._toggleDatePicker}>Cancel Date Picker</Button>
+                            </div>
+                            }
+                            {(!this.state.showDatePicker || this.state.showRepeatItemMenu) && 
                             <div>
                                 <Button  onClick={this._toggleRepeat}>Repeat this Item</Button>
-                                <Button>Specific Date</Button>
+                                <Button onClick={this._toggleDatePicker}>Specific Date</Button>
                             </div>
                                 
                             }
-                            
-
                         </div>
                         </div>
                         <div>
