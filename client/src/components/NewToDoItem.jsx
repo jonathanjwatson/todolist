@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Form, FormControl, FormGroup, Button, Checkbox } from 'react-bootstrap';
+import { Form, FormControl, FormGroup, Button, Checkbox, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 
 class NewToDoListItem extends Component {
@@ -11,19 +11,64 @@ class NewToDoListItem extends Component {
             description: '',
             dailyItem: false,
             dateDue: '',
-            mondayTask: false,
-            tuesdayTask: false,
-            wednesdayTask: false,
-            thursdayTask: false,
-            fridayTask: false,
-            saturdayTask: false,
-            sundayTask: false,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false,
             completed: false,
-            isDailyItem: false,
-            isRepeateItem: false,
-            isSpecificDateItem: false
-        }};
+            taskType: "isSporadicTask",
+            showRepeatItemMenu: false,
+            showSpecificDatePicker: false,
 
+        }};
+    clickTheRightBoxes = () => {
+        if (this.state.taskType === "isDailyTask"){
+            const newState = this.state;
+            newState.monday = true;
+            newState.tuesday = true;
+            newState.wednesday = true;
+            newState.thursday = true;
+            newState.friday = true;
+            newState.saturday = true;
+            newState.sunday = true;
+            this.setState(newState);
+        } else if (this.state.taskType === "isWeekdayTask"){
+            const newState = this.state;
+            newState.monday = true;
+            newState.tuesday = true;
+            newState.wednesday = true;
+            newState.thursday = true;
+            newState.friday = true;
+            newState.saturday = false;
+            newState.sunday = false;
+            this.setState(newState);
+        } else if (this.state.taskType === "isWeekendTask"){
+            const newState = this.state;
+            newState.monday = false;
+            newState.tuesday = false;
+            newState.wednesday = false;
+            newState.thursday = false;
+            newState.friday = false;
+            newState.saturday = true;
+            newState.sunday = true;
+            this.setState(newState);
+        }  else if (this.state.taskType === "isSporadicTask"){
+            const newState = this.state;
+            newState.monday = false;
+            newState.tuesday = false;
+            newState.wednesday = false;
+            newState.thursday = false;
+            newState.friday = false;
+            newState.saturday = false;
+            newState.sunday = false;
+            this.setState(newState);
+        } else{
+            alert("There was an issue making your selection. Please try again");
+        }
+    };
     _handleChange = (e) => {
         const attributeName = e.target.name;
         const attributeValue = e.target.value;
@@ -43,30 +88,42 @@ class NewToDoListItem extends Component {
         .catch((err) => {
             console.log(err)
         })
-    }
-    _toggleDaily = (e) => {
-        e.preventDefault();
-        const newState = {...this.state};
-        newState.isDailyItem = !newState.isDailyItem;
-        newState.dailyItem = !newState.dailyItem;
-        this.setState(newState);
+    };
+    _handleToggleChange = async (e) => {
+        console.log(e);
+        await this.setState({taskType: e});
+        await this.clickTheRightBoxes();
     }
     _toggleRepeat = (e) => {
         e.preventDefault();
         const newState = {...this.state};
-        newState.isRepeateItem = !newState.isRepeateItem;
+        newState.showRepeatItemMenu = !newState.showRepeatItemMenu;
         this.setState(newState);
-    }
+    };
     _toggleRepeatDays = (e) => {
         console.log(e.target);
         const attributeName = e.target.name;
         const newState = {...this.state};
         newState[attributeName] = !newState[attributeName];
+        newState.taskType = "isSporadicTask";
         this.setState(newState);
+    };
+    setDailyTask = (e) => {
+        console.log("Daily Task");
+    };
+    setWeekdayTask = (e) => {
+        console.log("Weekday Task");
+    };
+    setWeekendTask = (e) => {
+        console.log("Weekend Task");
+    };
+    setSporadicTask = (e) => {
+        console.log("Sporadic Task");
     }
+
     render() {
         return (
-            <div className="col-sm-4 col-min-width">
+            <div className="col-sm-4 col-md-offset-4 col-min-width">
                 <Form onSubmit={this._handleSubmit}>
                     <FormGroup>
                         <h3 style={{color: 'white'}}> Add new To Do Item </h3>
@@ -88,22 +145,25 @@ class NewToDoListItem extends Component {
                             placeholder="Description"
                         />
                         <div>
-                            {this.state.isDailyItem && <p>Submit New Daily Item</p>}
-                            <Button onClick={this._toggleDaily}>Daily Item</Button>
-                        </div>
-                        <div>
-                            {this.state.isRepeateItem && 
+                            {this.state.showRepeatItemMenu && 
                             <div>
+                            <ToggleButtonGroup type="radio" name="options" value={this.state.taskType} onChange={this._handleToggleChange}>
+                                    <ToggleButton inline="true" value="isDailyTask" >Daily Task</ToggleButton>
+                                    <ToggleButton inline="true" value="isWeekdayTask" >Weekday Task</ToggleButton>
+                                    <ToggleButton inline="true" value="isWeekendTask" >Weekend Task</ToggleButton>
+                                    <ToggleButton inline="true" value="isSporadicTask" >Sporadic Task</ToggleButton>
+                                </ToggleButtonGroup>
                                 <p>Select Which Days this Repeats</p>
                                 <FormGroup>
-                                    <Checkbox inline checked={this.state.mondayTask} name="mondayTask" onChange={this._toggleRepeatDays} >Monday</Checkbox>
-                                    <Checkbox inline checked={this.state.tuesdayTask} name="tuesdayTask" onChange={this._toggleRepeatDays}>Tuesday</Checkbox>
-                                    <Checkbox inline checked={this.state.wednesdayTask} name="wednesdayTask" onChange={this._toggleRepeatDays}>Wednesday</Checkbox>
-                                    <Checkbox inline checked={this.state.thursdayTask} name="thursdayTask" onChange={this._toggleRepeatDays}>Thursday</Checkbox>
-                                    <Checkbox inline checked={this.state.fridayTask} name="fridayTask" onChange={this._toggleRepeatDays}>Friday</Checkbox>
-                                    <Checkbox inline checked={this.state.saturdayTask} name="saturdayTask" onChange={this._toggleRepeatDays}>Saturday</Checkbox>
-                                    <Checkbox inline checked={this.state.sundayTask} name="sundayTask" onChange={this._toggleRepeatDays}>Sunday</Checkbox>
+                                    <Checkbox inline checked={this.state.monday} name="monday" onChange={this._toggleRepeatDays} >Monday</Checkbox>
+                                    <Checkbox inline checked={this.state.tuesday} name="tuesday" onChange={this._toggleRepeatDays}>Tuesday</Checkbox>
+                                    <Checkbox inline checked={this.state.wednesday} name="wednesday" onChange={this._toggleRepeatDays}>Wednesday</Checkbox>
+                                    <Checkbox inline checked={this.state.thursday} name="thursday" onChange={this._toggleRepeatDays}>Thursday</Checkbox>
+                                    <Checkbox inline checked={this.state.friday} name="friday" onChange={this._toggleRepeatDays}>Friday</Checkbox>
+                                    <Checkbox inline checked={this.state.saturday} name="saturday" onChange={this._toggleRepeatDays}>Saturday</Checkbox>
+                                    <Checkbox inline checked={this.state.sunday} name="sunday" onChange={this._toggleRepeatDays}>Sunday</Checkbox>
                                 </FormGroup>
+                                
                                 </div>
                             }
                             <Button onClick={this._toggleRepeat}>Repeat this Item</Button>
@@ -117,7 +177,7 @@ class NewToDoListItem extends Component {
                         
                         <Button>Specific Date</Button>
                         <div>
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit" bsStyle="primary">Submit</Button>
                         </div>
                         
                     </FormGroup>

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 var cron = require('cron');
+const AllController = require("./controllers/all");
 const DailyListController = require("./controllers/dailyList");
 const TaskCreatorController = require("./controllers/taskCreator");
 const DailyListCreatorController = require("./controllers/buildDailyList");
@@ -29,6 +30,7 @@ app.use(bodyParser.json());
 // }); 
 // cronJob.start();
 
+app.use('/api/v1/all', AllController);
 app.use('/api/v1/dailyList', DailyListController);
 app.use('/api/v1/taskCreator', TaskCreatorController);
 app.use('/api/v1/createTodaysTasks', DailyListCreatorController);
